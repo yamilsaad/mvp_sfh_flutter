@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../layouts/layout.dart';
+
 class NewClientScreen extends StatelessWidget {
   const NewClientScreen({super.key});
 
@@ -10,7 +12,9 @@ class NewClientScreen extends StatelessWidget {
         title: Text('Nuevo Cliente'),
       ),
       body: Column(
-        children: [],
+        children: [
+          NewClientLayout(),
+        ],
       ),
     );
   }
