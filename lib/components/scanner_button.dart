@@ -17,7 +17,7 @@ class _ButtonScannerComponentState extends State<ButtonScannerComponent> {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      color: Colors.blue.shade700,
+      color: Colors.pink,
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: FloatingActionButton(
