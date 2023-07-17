@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../components/component.dart';
 import '../layouts/layout.dart';
 
 class NewClientScreen extends StatelessWidget {
@@ -16,6 +17,8 @@ class NewClientScreen extends StatelessWidget {
           NewClientLayout(),
         ],
       ),
+      bottomNavigationBar: //Botón de Scanner en barra inferior:
+          ButtonScannerComponent(),
     );
   }
 }

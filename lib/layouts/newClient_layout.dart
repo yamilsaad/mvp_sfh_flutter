@@ -40,8 +40,6 @@ class NewClientLayout extends StatelessWidget {
         //Información Scanneada:
         ScannerWidget(),
         Divider(height: 5),
-        //Botón de Scanner en barra inferior:
-        ButtonScannerComponent(),
       ],
     );
   }

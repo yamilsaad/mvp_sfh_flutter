@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 import '../widgets/widget.dart';
 
@@ -11,6 +12,7 @@ class ButtonScannerComponent extends StatefulWidget {
 
 class _ButtonScannerComponentState extends State<ButtonScannerComponent> {
   bool _isContainerVisible = false;
+  String _scannedData = "";
 
   @override
   Widget build(BuildContext context) {
@@ -22,14 +24,21 @@ class _ButtonScannerComponentState extends State<ButtonScannerComponent> {
           elevation: 5,
           hoverElevation: 5.0,
           highlightElevation: 12.0,
-          backgroundColor: Colors.orange.shade700,
-          onPressed: () {
-            // Ejecutar alguna acción que debe hacer visible el Container
-            setState(() {
-              _isContainerVisible = true;
-            });
-            // Crear instancia de ScannerWidget y usarla como hijo de Visibility
-            ScannerWidget scannerWidget = ScannerWidget();
+          backgroundColor: Colors.pink,
+          onPressed: () async {
+            String scannedData = await FlutterBarcodeScanner.scanBarcode(
+              "#000000",
+              "Cancelar",
+              true,
+              ScanMode.BARCODE,
+            );
+
+            if (scannedData != "-1") {
+              setState(() {
+                _scannedData = scannedData;
+                _isContainerVisible = true;
+              });
+            }
           },
           child: Icon(
             Icons.qr_code,
