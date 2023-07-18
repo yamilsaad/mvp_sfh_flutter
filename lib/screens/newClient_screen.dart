@@ -17,8 +17,9 @@ class NewClientScreen extends StatelessWidget {
           NewClientLayout(),
         ],
       ),
-      bottomNavigationBar: //Botón de Scanner en barra inferior:
-          ButtonScannerComponent(),
+      //Botón de Scanner en barra inferior:
+      bottomNavigationBar:
+        ButtonScannerComponent(),
     );
   }
 }
