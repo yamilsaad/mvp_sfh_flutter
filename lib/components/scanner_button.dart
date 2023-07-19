@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
-import '../widgets/widget.dart';
-
 class ButtonScannerComponent extends StatefulWidget {
-  const ButtonScannerComponent({super.key});
+  final Function(String) updateScannedData;
+
+  const ButtonScannerComponent({super.key, required this.updateScannedData});
 
   @override
   State<ButtonScannerComponent> createState() => _ButtonScannerComponentState();
 }
 
 class _ButtonScannerComponentState extends State<ButtonScannerComponent> {
-  bool _isContainerVisible = false;
-  String _scannedData = "";
-
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
@@ -34,10 +31,8 @@ class _ButtonScannerComponentState extends State<ButtonScannerComponent> {
             );
 
             if (scannedData != "-1") {
-              setState(() {
-                _scannedData = scannedData;
-                _isContainerVisible = true;
-              });
+              // Llamamos a la función updateScannedData para enviar la información escaneada.
+              widget.updateScannedData(scannedData);
             }
           },
           child: Icon(
