@@ -15,6 +15,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final FlutterLocalization _localization = FlutterLocalization.instance;
+  String _scannedData = ''; // Variable para almacenar la información escaneada
 
   @override
   void initState() {
@@ -56,7 +57,10 @@ class _MyAppState extends State<MyApp> {
       initialRoute: '/home',
       routes: {
         '/home': (context) => HomeScreen(),
-        'new_client': (context) => NewClientScreen(),
+        'new_client': (context) => NewClientScreen(
+              scannedData:
+                  _scannedData, // Pasar el valor actual de _scannedData
+            ),
       },
     );
   }
