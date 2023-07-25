@@ -5,3 +5,4 @@ export 'package:mvp_sfh_flutter/widgets/job_select.dart';
 export 'package:mvp_sfh_flutter/widgets/recibo_form.dart';
 export 'package:mvp_sfh_flutter/widgets/scanner_widget.dart';
 export 'package:mvp_sfh_flutter/widgets/text_title.dart';
+export 'package:mvp_sfh_flutter/widgets/image_pepers.dart';

@@ -83,6 +83,10 @@ class _NewClientScreenState extends State<NewClientScreen> {
               ],
             ),
             const Divider(height: 5),
+            TextSubtitleWidget(
+              titleText: '# Foto DNI, Recivo de Sueldo, Garante',
+            ),
+            ImagePeper(),
           ],
         ),
       ),
