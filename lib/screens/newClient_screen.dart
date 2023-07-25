@@ -44,29 +44,45 @@ class _NewClientScreenState extends State<NewClientScreen> {
             TextSubtitleWidget(
               titleText: '# Ingrese Información del Nuevo Cliente',
             ),
-            Divider(height: 5),
+            const Divider(height: 5),
             CelInputWidget(celularController: _celularController),
-            Divider(height: 5),
+            const Divider(height: 5),
             JobTipoWidget(
               onJobSelected: (String) {
                 selectedTrabajo = selectedTrabajo.toString();
               },
             ),
-            Divider(height: 5),
+            const Divider(height: 5),
             ReciboFormWidget(
               reciboFormController: _reciboFormController,
             ),
-            Divider(height: 5),
+            const Divider(height: 5),
             DataSelectWidget(),
-            Divider(height: 5),
+            const Divider(height: 5),
+            TextSubtitleWidget(
+              titleText: '# Foto de Perfil y Scanner DNI',
+            ),
             // Mostrar el contenedor con la información escaneada.
-            Visibility(
+            /*Visibility(
               visible: _scannedData.isNotEmpty,
               child: InfoDniWidget(
-                data: _scannedData,
+                data:
+                    _scannedData, // Pasamos la información escaneada al widget InfoDniWidget.
               ),
+            ),*/
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(width: 15),
+                ImageUsuarioWidget(),
+                SizedBox(width: 15),
+                InfoDniWidget(
+                  data:
+                      _scannedData, // Pasamos la información escaneada al widget InfoDniWidget.
+                ),
+              ],
             ),
-            Divider(height: 5),
+            const Divider(height: 5),
           ],
         ),
       ),

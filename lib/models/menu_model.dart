@@ -27,7 +27,7 @@ Widget _menuItem(BuildContext context, String title, IconData icon, Color color,
     child: Container(
       margin: EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: Colors.orange,
+        color: Colors.pink,
         borderRadius: BorderRadius.circular(16.0),
         boxShadow: [
           BoxShadow(

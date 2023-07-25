@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class TextSubtitleWidget extends StatelessWidget {
   final String titleText;
   final TextStyle styleText =
-      TextStyle(color: Colors.blue, fontSize: 20, fontWeight: FontWeight.bold);
+      TextStyle(color: Colors.pink, fontSize: 20, fontWeight: FontWeight.bold);
 
   TextSubtitleWidget({super.key, required this.titleText});
 

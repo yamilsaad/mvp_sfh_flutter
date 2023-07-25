@@ -14,7 +14,7 @@ class ButtonScannerComponent extends StatefulWidget {
 }
 
 class _ButtonScannerComponentState extends State<ButtonScannerComponent> {
-  //bool isContainerVisible = false; // Inicialmente no hay datos escaneados.
+  String _data = ''; // Variable para almacenar la información formateada.
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +36,15 @@ class _ButtonScannerComponentState extends State<ButtonScannerComponent> {
             );
 
             if (scannedData != "-1") {
+              // Se verifica si no se ha cancelado la operación
+              List<String> dataValues = scannedData.split("@");
+              String formattedData =
+                  "Tramite: ${dataValues[0]}, Apellido: ${dataValues[1]}, Nombre: ${dataValues[2]} Sexo: ${dataValues[3]}, DNI: ${dataValues[4]}, Clase: ${dataValues[5]}, Fecha de vencimiento: ${dataValues[6]} - ${dataValues[7]}, Numero: ${dataValues[8]}";
               setState(() {
-                // Llamamos a la función updateScannedData para enviar la información escaneada.
-                widget.updateScannedData(scannedData);
+                _data =
+                    formattedData; // Actualizar el estado con la información formateada.
+                widget.updateScannedData(
+                    formattedData); // Llamamos a la función updateScannedData con la información formateada.
               });
             }
           },
