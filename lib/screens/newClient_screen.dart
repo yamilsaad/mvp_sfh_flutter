@@ -25,8 +25,7 @@ class _NewClientScreenState extends State<NewClientScreen> {
   //LÓGICA DE ENVÍO DE GUARDADO Y ENVIOS DE DATOS (WEBSERVICE)
   void _sendData(DateTime fechaHora) async {
     //!Ingresar Web Service!!!!!!!!!
-    final url =
-        Uri.parse('http://192.168.1.102:8080/datasnap/rest/TSFHWebSvr/usuario');
+    final url = Uri.parse('http://192.168.1.241:8000/api/clientes');
     final headers = {'Content-Type': 'application/json'};
     //final firmaData = firmaWidget.obtenerFirmaData(); // Obtener los datos de la firma
     final body = {
