@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 import '../components/component.dart';
 import '../widgets/widget.dart';
 
@@ -12,23 +15,44 @@ class NewClientScreen extends StatefulWidget {
 }
 
 class _NewClientScreenState extends State<NewClientScreen> {
-  TextEditingController _celularController = TextEditingController();
-  TextEditingController _reciboFormController = TextEditingController();
+  final TextEditingController _celularController = TextEditingController();
+  final TextEditingController _reciboFormController = TextEditingController();
+  String? fechaSeleccionada;
   String selectedTrabajo = '';
   String _scannedData = ''; // Variable para almacenar la información escaneada
   bool isContainerVisible = false;
 
-  void _sendData() async {
-    // Aquí armarías el mapa con la información que deseas enviar al web service
+  //LÓGICA DE ENVÍO DE GUARDADO Y ENVIOS DE DATOS (WEBSERVICE)
+  void _sendData(DateTime fechaHora) async {
+    //!Ingresar Web Service!!!!!!!!!
+    final url =
+        Uri.parse('http://192.168.1.102:8080/datasnap/rest/TSFHWebSvr/usuario');
+    final headers = {'Content-Type': 'application/json'};
+    //final firmaData = firmaWidget.obtenerFirmaData(); // Obtener los datos de la firma
     final body = {
-      //'DOMICILIO1': selectedLocalidad,
-      //'celular': celularController.text,
-      //'infoDni': _scannedData,
-      // Otros campos...
+      'celular': _celularController.text,
+      'trabajo':
+          selectedTrabajo, // remplaza selectedTrabajo con la variable que contiene el valor seleccionado en tu TrabajoTipoWidget
+      'infoDni': _scannedData,
+      'foto_usuario': [],
+      'fotos':
+          [], // aquí puedes agregar las rutas de las fotos que hayas tomado en tu app
+      'fecha': DateTime.now().toString(), // incluye la fecha y hora actual
+      'total_recibo': _reciboFormController.text,
+      //'fecha_recibo': fechaReciboController.text,
+      //'firmaData': firmaData,
     };
 
-    // El código para enviar el mapa al web service...
-    // Puedes utilizar la función _sendData que ya has proporcionado y adaptarla aquí.
+    final response =
+        await http.post(url, headers: headers, body: jsonEncode(body));
+
+    if (response.statusCode == 200) {
+      // El web service respondió correctamente
+      print('Información enviada correctamente');
+    } else {
+      // El web service respondió con un error
+      print('Error al enviar la información');
+    }
   }
 
   @override
@@ -57,19 +81,18 @@ class _NewClientScreenState extends State<NewClientScreen> {
               reciboFormController: _reciboFormController,
             ),
             const Divider(height: 5),
-            DataSelectWidget(),
+            DataSelectWidget(
+              onDateSelected: (String selectedDate) {
+                // Actualiza la variable local con el valor seleccionado
+                fechaSeleccionada = selectedDate;
+                print(
+                    'Fecha seleccionada en MiOtraPantalla: $fechaSeleccionada');
+              },
+            ),
             const Divider(height: 5),
             TextSubtitleWidget(
               titleText: '# Foto de Perfil y Scanner DNI',
             ),
-            // Mostrar el contenedor con la información escaneada.
-            /*Visibility(
-              visible: _scannedData.isNotEmpty,
-              child: InfoDniWidget(
-                data:
-                    _scannedData, // Pasamos la información escaneada al widget InfoDniWidget.
-              ),
-            ),*/
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -87,6 +110,12 @@ class _NewClientScreenState extends State<NewClientScreen> {
               titleText: '# Foto DNI, Recivo de Sueldo, Garante',
             ),
             ImagePeper(),
+            SizedBox(
+              //*Botón ENVIAR con un ALERT:
+              width: 350,
+              child: ButtonSend().buttonSend(
+                  context), //instancia de ButtonSend llamando el metodo buttonSend.
+            ),
           ],
         ),
       ),
@@ -101,3 +130,19 @@ class _NewClientScreenState extends State<NewClientScreen> {
     );
   }
 }
+
+
+
+
+
+
+
+
+// Mostrar el contenedor con la información escaneada.
+            /*Visibility(
+              visible: _scannedData.isNotEmpty,
+              child: InfoDniWidget(
+                data:
+                    _scannedData, // Pasamos la información escaneada al widget InfoDniWidget.
+              ),
+            ),*/

@@ -3,11 +3,19 @@ import 'package:flutter_localization/flutter_localization.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 
 class DataSelectWidget extends StatefulWidget {
+  final void Function(String)
+      onDateSelected; // La función de devolución de llamada
+
+  DataSelectWidget(
+      {required this.onDateSelected}); // Constructor con la función de devolución de llamada
+
   @override
   State<DataSelectWidget> createState() => _DataSelectWidgetState();
 }
 
 class _DataSelectWidgetState extends State<DataSelectWidget> {
+  String? dataRecibo;
+
   final FlutterLocalization _localization = FlutterLocalization.instance;
 
   DateTime? _selectedDateTime;
@@ -64,9 +72,15 @@ class _DataSelectWidgetState extends State<DataSelectWidget> {
                 },
               );
 
-              setState(() {
-                _selectedDateTime = dateTime;
-              });
+              if (dateTime != null) {
+                setState(() {
+                  _selectedDateTime = dateTime;
+                  dataRecibo = _selectedDateTime!.toIso8601String();
+                });
+
+                // Llama a la función de devolución de llamada y pasa el valor seleccionado
+                widget.onDateSelected(dataRecibo!);
+              }
 
               print("dateTime: $dateTime");
             },
