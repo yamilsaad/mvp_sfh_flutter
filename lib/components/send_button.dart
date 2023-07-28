@@ -42,6 +42,9 @@ class ButtonSend {
                 );
               });
         },
-        child: Text('Enviar'));
+        child: Text(
+          'Enviar',
+          style: TextStyle(color: Colors.white, fontSize: 20),
+        ));
   }
 }

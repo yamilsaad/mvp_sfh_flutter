@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:http/http.dart' as http;
 
 import '../widgets/widget.dart';
 
@@ -14,7 +16,7 @@ class ButtonScannerComponent extends StatefulWidget {
 }
 
 class _ButtonScannerComponentState extends State<ButtonScannerComponent> {
-  String _data = ''; // Variable para almacenar la información formateada.
+  String _data = '';
 
   @override
   Widget build(BuildContext context) {
@@ -36,15 +38,90 @@ class _ButtonScannerComponentState extends State<ButtonScannerComponent> {
             );
 
             if (scannedData != "-1") {
-              // Se verifica si no se ha cancelado la operación
               List<String> dataValues = scannedData.split("@");
               String formattedData =
                   "Tramite: ${dataValues[0]}, Apellido: ${dataValues[1]}, Nombre: ${dataValues[2]} Sexo: ${dataValues[3]}, DNI: ${dataValues[4]}, Clase: ${dataValues[5]}, Fecha de vencimiento: ${dataValues[6]} - ${dataValues[7]}, Numero: ${dataValues[8]}";
+
+              final dni = dataValues[4];
+              final url =
+                  Uri.parse('http://192.168.1.241:8000/api/clientes/$dni');
+
+              try {
+                final response = await http.get(url);
+                if (response.statusCode == 200) {
+                  final jsonResponse = jsonDecode(response.body);
+                  if (jsonResponse.containsKey('APELLIDO') &&
+                      jsonResponse.containsKey('NOMBRE')) {
+                    String apellido = jsonResponse['APELLIDO'];
+                    String nombre = jsonResponse['NOMBRE'];
+                    String clienteInfo = 'Nombre: $nombre, Apellido: $apellido';
+
+                    showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        title: Text("Cliente encontrado"),
+                        content: Text(clienteInfo),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: Text("OK"),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        title: Text("Cliente no encontrado"),
+                        content: Text(
+                            "El cliente con DNI $dni no existe en la base de datos."),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: Text("OK"),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                } else {
+                  // El servidor no responde con el código 200
+                  showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                      title: Text("Error en el servidor"),
+                      content: Text("No se pudo conectar al web service."),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text("OK"),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              } catch (e) {
+                // Error durante la petición HTTP
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: Text("Error"),
+                    content: Text(
+                        "Hubo un error al realizar la petición al servidor."),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text("OK"),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
               setState(() {
-                _data =
-                    formattedData; // Actualizar el estado con la información formateada.
-                widget.updateScannedData(
-                    formattedData); // Llamamos a la función updateScannedData con la información formateada.
+                _data = formattedData;
+                widget.updateScannedData(formattedData);
               });
             }
           },

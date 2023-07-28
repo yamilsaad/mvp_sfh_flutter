@@ -56,6 +56,7 @@ class _NewClientScreenState extends State<NewClientScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ButtonSms buttonSms = ButtonSms();
     return Scaffold(
       appBar: AppBar(
         title: Text('Nuevo Cliente'),
@@ -109,12 +110,20 @@ class _NewClientScreenState extends State<NewClientScreen> {
               titleText: '# Foto DNI, Recivo de Sueldo, Garante',
             ),
             ImagePeper(),
+            SizedBox(height: 10),
+            SizedBox(
+              //*Botón ENVIAR SMS:
+              width: 350,
+              child: buttonSms.buttonSms(context, _celularController),
+            ),
+            SizedBox(height: 10),
             SizedBox(
               //*Botón ENVIAR con un ALERT:
-              width: 350,
+              width: double.infinity,
               child: ButtonSend().buttonSend(
                   context), //instancia de ButtonSend llamando el metodo buttonSend.
             ),
+            SizedBox(height: 10),
           ],
         ),
       ),
