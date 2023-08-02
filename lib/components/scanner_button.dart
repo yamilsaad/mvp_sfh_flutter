@@ -30,104 +30,129 @@ class _ButtonScannerComponentState extends State<ButtonScannerComponent> {
           hoverElevation: 5.0,
           highlightElevation: 12.0,
           backgroundColor: Colors.pink,
-          onPressed: _scanDocument,
+          onPressed: () async {
+            String scannedData = await FlutterBarcodeScanner.scanBarcode(
+              "#000000",
+              "Cancelar",
+              true,
+              ScanMode.BARCODE,
+            );
+
+            if (scannedData != "-1") {
+              List<String> dataValues = scannedData.split("@");
+              String formattedData =
+                  "Tramite: ${dataValues[0]}, Apellido: ${dataValues[1]}, Nombre: ${dataValues[2]} Sexo: ${dataValues[3]}, DNI: ${dataValues[4]}, Clase: ${dataValues[5]}, Fecha de vencimiento: ${dataValues[6]} - ${dataValues[7]}, Numero: ${dataValues[8]}";
+
+              final dni = dataValues[4];
+              final url =
+                  Uri.parse('${ScannerConfig.apiUrl}/api/clientes/$dni');
+              try {
+                final response = await http.get(url);
+                if (response.statusCode == 200) {
+                  final jsonResponse = jsonDecode(response.body);
+                  if (jsonResponse.containsKey('success')) {
+                    if (jsonResponse['success']) {
+                      // Cliente encontrado
+                      Map<String, dynamic> datosPersonales =
+                          jsonResponse['datos_personales'];
+                      String apellido = datosPersonales['APELLIDO'];
+                      String nombre = datosPersonales['NOMBRE'];
+                      String clienteInfo =
+                          'Nombre: $nombre, Apellido: $apellido';
+
+                      showDialog(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                          title: Text("Cliente encontrado"),
+                          content: Text(clienteInfo),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Text("OK"),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else if (dni == false) {
+                      // Cliente no encontrado
+                      String errorMessage =
+                          jsonResponse['message'] ?? "Cliente no encontrado";
+                      showDialog(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                          title: Text("Cliente no encontrado"),
+                          content: Text(errorMessage),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Text("OK"),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  } else {
+                    // Respuesta no válida, mostrar mensaje genérico
+                    showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        title: Text("Error en el servidor"),
+                        content: Text("Respuesta no válida del servidor."),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: Text("OK"),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                } else {
+                  // El servidor no responde con el código 200
+                  /*showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text("Error en el servidor"),
+        content: Text("No se pudo conectar al web service."),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("OK"),
+          ),
+        ],
+      ),
+    );*/
+                }
+              } catch (e) {
+                // Error durante la petición HTTP
+                print('Error en la petición HTTP: $e');
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: Text("Error"),
+                    content: Text(
+                        "Hubo un error al realizar la petición al servidor."),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text("OK"),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              setState(() {
+                _data = formattedData;
+                widget.updateScannedData(formattedData);
+              });
+            }
+          },
           child: Icon(
             Icons.qr_code,
             size: 40,
           ),
         ),
-      ),
-    );
-  }
-
-  void _scanDocument() async {
-    String scannedData = await FlutterBarcodeScanner.scanBarcode(
-      "#000000",
-      "Cancelar",
-      true,
-      ScanMode.BARCODE,
-    );
-
-    if (scannedData != "-1") {
-      List<String> dataValues = scannedData.split("@");
-      String formattedData =
-          "Tramite: ${dataValues[0]}, Apellido: ${dataValues[1]}, Nombre: ${dataValues[2]} Sexo: ${dataValues[3]}, DNI: ${dataValues[4]}, Clase: ${dataValues[5]}, Fecha de vencimiento: ${dataValues[6]} - ${dataValues[7]}, Numero: ${dataValues[8]}";
-
-      final dni = dataValues[4];
-      await _fetchClienteInfo(dni, formattedData);
-    }
-  }
-
-  Future<void> _fetchClienteInfo(String dni, String formattedData) async {
-    final url = Uri.parse('${ScannerConfig.apiUrl}/api/clientes/$dni');
-    try {
-      final response = await http.get(url);
-      if (response.statusCode == 200) {
-        final jsonResponse = jsonDecode(response.body);
-        if (jsonResponse.containsKey('APELLIDO') &&
-            jsonResponse.containsKey('NOMBRE')) {
-          String apellido = jsonResponse['APELLIDO'];
-          String nombre = jsonResponse['NOMBRE'];
-          String clienteInfo = 'Nombre: $nombre, Apellido: $apellido';
-
-          _showClienteEncontradoDialog(clienteInfo);
-        } else {
-          _showClienteNoEncontradoDialog(dni);
-        }
-      } else {
-        _showErrorDialog(
-            'Error en el servidor', 'No se pudo conectar al web service.');
-      }
-    } catch (e) {
-      _showErrorDialog(
-          'Error', 'Hubo un error al realizar la petición al servidor.');
-    }
-  }
-
-  void _showClienteEncontradoDialog(String clienteInfo) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text("Cliente encontrado"),
-        content: Text(clienteInfo),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text("OK"),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showClienteNoEncontradoDialog(String dni) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text("Cliente no encontrado"),
-        content: Text("El cliente con DNI $dni no existe en la base de datos."),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text("OK"),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showErrorDialog(String title, String content) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text(title),
-        content: Text(content),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text("OK"),
-          ),
-        ],
       ),
     );
   }
