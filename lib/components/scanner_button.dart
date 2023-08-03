@@ -2,9 +2,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 import '../configs/config.dart';
-import '../widgets/widget.dart';
+import '../providers/provider.dart';
 
 class ButtonScannerComponent extends StatefulWidget {
   final Function(String) updateScannedData;
@@ -73,7 +74,7 @@ class _ButtonScannerComponentState extends State<ButtonScannerComponent> {
                           ],
                         ),
                       );
-                    } else if (dni == false) {
+                    } else {
                       // Cliente no encontrado
                       String errorMessage =
                           jsonResponse['message'] ?? "Cliente no encontrado";
@@ -91,37 +92,22 @@ class _ButtonScannerComponentState extends State<ButtonScannerComponent> {
                         ),
                       );
                     }
-                  } else {
-                    // Respuesta no válida, mostrar mensaje genérico
-                    showDialog(
-                      context: context,
-                      builder: (_) => AlertDialog(
-                        title: Text("Error en el servidor"),
-                        content: Text("Respuesta no válida del servidor."),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: Text("OK"),
-                          ),
-                        ],
-                      ),
-                    );
                   }
                 } else {
                   // El servidor no responde con el código 200
-                  /*showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text("Error en el servidor"),
-        content: Text("No se pudo conectar al web service."),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text("OK"),
-          ),
-        ],
-      ),
-    );*/
+                  showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                      title: Text("Cliente inexistente"),
+                      content: Text("Cargue información"),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text("OK"),
+                        ),
+                      ],
+                    ),
+                  );
                 }
               } catch (e) {
                 // Error durante la petición HTTP
@@ -146,6 +132,10 @@ class _ButtonScannerComponentState extends State<ButtonScannerComponent> {
                 _data = formattedData;
                 widget.updateScannedData(formattedData);
               });
+
+              // Usar el provider para guardar la información escaneada
+              Provider.of<DataDniProvider>(context, listen: false).dataDni =
+                  formattedData;
             }
           },
           child: Icon(

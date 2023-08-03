@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localization/flutter_localization.dart';
+import 'package:provider/provider.dart';
 
 import 'models/model.dart';
 import 'screens/screen.dart';
+import 'package:mvp_sfh_flutter/providers/provider.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => DataDniProvider())],
+      child: MyApp(),
+    ));
 
 class MyApp extends StatefulWidget {
   MyApp({Key? key}) : super(key: key);
