@@ -7,12 +7,15 @@ import 'screens/screen.dart';
 import 'package:mvp_sfh_flutter/providers/provider.dart';
 
 void main() => runApp(MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => DataDniProvider())],
-      child: MyApp(),
+      providers: [
+        ChangeNotifierProvider(create: (_) => DataDniProvider()),
+        ChangeNotifierProvider(create: (_) => UserImgProvider()),
+      ],
+      child: const MyApp(),
     ));
 
 class MyApp extends StatefulWidget {
-  MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -20,7 +23,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final FlutterLocalization _localization = FlutterLocalization.instance;
-  String _scannedData = ''; // Variable para almacenar la información escaneada
+  final String _scannedData =
+      ''; // Variable para almacenar la información escaneada
 
   @override
   void initState() {
@@ -61,7 +65,7 @@ class _MyAppState extends State<MyApp> {
       title: 'Credits App SFH',
       initialRoute: '/home',
       routes: {
-        '/home': (context) => HomeScreen(),
+        '/home': (context) => const HomeScreen(),
         'new_client': (context) => NewClientScreen(
               scannedData:
                   _scannedData, // Pasar el valor actual de _scannedData
