@@ -10,6 +10,7 @@ void main() => runApp(MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => DataDniProvider()),
         ChangeNotifierProvider(create: (_) => UserImgProvider()),
+        ChangeNotifierProvider(create: (_) => PapersImgProvider()),
       ],
       child: const MyApp(),
     ));

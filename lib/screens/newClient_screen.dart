@@ -28,6 +28,7 @@ class _NewClientScreenState extends State<NewClientScreen> {
   void _sendData(DateTime fechaHora) async {
     final dataDni = Provider.of<DataDniProvider>(context);
     final userImg = Provider.of<UserImgProvider>(context);
+    final paperImg = Provider.of<PapersImgProvider>(context);
     //!Ingresar Web Service!!!!!!!!!
     final url = Uri.parse('http://192.168.1.241:8000/api/clientes');
     final headers = {'Content-Type': 'application/json'};
@@ -38,8 +39,8 @@ class _NewClientScreenState extends State<NewClientScreen> {
           selectedTrabajo, // remplaza selectedTrabajo con la variable que contiene el valor seleccionado en tu TrabajoTipoWidget
       'infoDni': dataDni,
       'foto_usuario': userImg,
-      'fotos':
-          [], // aquí puedes agregar las rutas de las fotos que hayas tomado en tu app
+      'fotos_paper':
+          paperImg, // aquí puedes agregar las rutas de las fotos que hayas tomado en tu app
       'fecha': DateTime.now().toString(), // incluye la fecha y hora actual
       'total_recibo': _reciboFormController.text,
       //'fecha_recibo': fechaReciboController.text,

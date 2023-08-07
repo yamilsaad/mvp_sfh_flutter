@@ -3,6 +3,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/provider.dart';
 
 class ImagePeper extends StatefulWidget {
   const ImagePeper({
@@ -24,6 +27,9 @@ class _ImagePeperState extends State<ImagePeper> {
     setState(() {
       if (pickedFile != null) {
         _images[index] = File(pickedFile.path);
+        // Agrega las fotos a la lista de imágenes del provider
+        Provider.of<PapersImgProvider>(context, listen: false)
+            .addImg(_images[index]!);
       } else {
         print('No se seleccionó ninguna imagen.');
       }
