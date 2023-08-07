@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 import '../components/component.dart';
+import '../providers/provider.dart';
 import '../widgets/widget.dart';
 
 class NewClientScreen extends StatefulWidget {
@@ -25,6 +26,8 @@ class _NewClientScreenState extends State<NewClientScreen> {
 
   //LÓGICA DE ENVÍO DE GUARDADO Y ENVIOS DE DATOS (WEBSERVICE)
   void _sendData(DateTime fechaHora) async {
+    final dataDni = Provider.of<DataDniProvider>(context);
+    final userImg = Provider.of<UserImgProvider>(context);
     //!Ingresar Web Service!!!!!!!!!
     final url = Uri.parse('http://192.168.1.241:8000/api/clientes');
     final headers = {'Content-Type': 'application/json'};
@@ -33,8 +36,8 @@ class _NewClientScreenState extends State<NewClientScreen> {
       'celular': _celularController.text,
       'trabajo':
           selectedTrabajo, // remplaza selectedTrabajo con la variable que contiene el valor seleccionado en tu TrabajoTipoWidget
-      'infoDni': _scannedData,
-      'foto_usuario': [],
+      'infoDni': dataDni,
+      'foto_usuario': userImg,
       'fotos':
           [], // aquí puedes agregar las rutas de las fotos que hayas tomado en tu app
       'fecha': DateTime.now().toString(), // incluye la fecha y hora actual
@@ -139,9 +142,6 @@ class _NewClientScreenState extends State<NewClientScreen> {
     );
   }
 }
-
-
-
 
 
 

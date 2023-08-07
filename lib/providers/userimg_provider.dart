@@ -1,12 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class UserImgProvider extends ChangeNotifier {
-  List<String> _image = [];
+  List<File> _image = []; // Cambio aquí
 
-  List<String> get imgUser => _image;
+  List<File> get imgUser => _image; // Cambio aquí
 
-  set imgUser(List<String> newImageUser) {
-    _image = newImageUser;
+  void addImage(File image) {
+    _image.add(image);
     notifyListeners();
   }
 }
