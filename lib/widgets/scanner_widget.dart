@@ -18,7 +18,7 @@ class InfoDniWidget extends StatefulWidget {
 class _InfoDniWidgetState extends State<InfoDniWidget> {
   @override
   Widget build(BuildContext context) {
-    final providerInfo = Provider.of<DataDniProvider>(context);
+    final providerInfo = Provider.of<UserInfoProvider>(context).userInfo;
 
     return Material(
       elevation: 10,
@@ -33,7 +33,7 @@ class _InfoDniWidgetState extends State<InfoDniWidget> {
         ),
         child: Padding(
           padding: const EdgeInsets.all(15.0),
-          child: Text(providerInfo.dataDni,
+          child: Text(providerInfo.infoDni,
               style: TextStyle(color: Colors.white, fontSize: 16)),
         ),
       ),

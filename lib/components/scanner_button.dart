@@ -43,7 +43,14 @@ class _ButtonScannerComponentState extends State<ButtonScannerComponent> {
               List<String> dataValues = scannedData.split("@");
               String formattedData =
                   "Tramite: ${dataValues[0]}, Apellido: ${dataValues[1]}, Nombre: ${dataValues[2]} Sexo: ${dataValues[3]}, DNI: ${dataValues[4]}, Clase: ${dataValues[5]}, Fecha de vencimiento: ${dataValues[6]} - ${dataValues[7]}, Numero: ${dataValues[8]}";
+              // Obtener el valor del DNI escaneado
+              String scannedDni = dataValues[4];
 
+              // Usar el provider para guardar la información escaneada en el campo infoDni
+              // ignore: use_build_context_synchronously
+              Provider.of<UserInfoProvider>(context, listen: false)
+                  .userInfo
+                  .infoDni = scannedDni;
               final dni = dataValues[4];
               final url =
                   Uri.parse('${ScannerConfig.apiUrl}/api/clientes/$dni');
@@ -132,10 +139,6 @@ class _ButtonScannerComponentState extends State<ButtonScannerComponent> {
                 _data = formattedData;
                 widget.updateScannedData(formattedData);
               });
-
-              // Usar el provider para guardar la información escaneada
-              Provider.of<DataDniProvider>(context, listen: false).dataDni =
-                  formattedData;
             }
           },
           child: Icon(

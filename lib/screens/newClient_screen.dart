@@ -26,9 +26,9 @@ class _NewClientScreenState extends State<NewClientScreen> {
 
   //LÓGICA DE ENVÍO DE GUARDADO Y ENVIOS DE DATOS (WEBSERVICE)
   void _sendData(DateTime fechaHora) async {
-    final dataDni = Provider.of<DataDniProvider>(context);
+    final infoDni = Provider.of<UserInfoProvider>(context);
     final userImg = Provider.of<UserImgProvider>(context);
-    final paperImg = Provider.of<PapersImgProvider>(context);
+    final paperImg = Provider.of<UserImgProvider>(context);
     //!Ingresar Web Service!!!!!!!!!
     final url = Uri.parse('http://192.168.1.241:8000/api/clientes');
     final headers = {'Content-Type': 'application/json'};
@@ -37,7 +37,7 @@ class _NewClientScreenState extends State<NewClientScreen> {
       'celular': _celularController.text,
       'trabajo':
           selectedTrabajo, // remplaza selectedTrabajo con la variable que contiene el valor seleccionado en tu TrabajoTipoWidget
-      'infoDni': dataDni,
+      'infoDni': infoDni,
       'foto_usuario': userImg,
       'fotos_paper':
           paperImg, // aquí puedes agregar las rutas de las fotos que hayas tomado en tu app

@@ -11,7 +11,8 @@ void main() => runApp(MultiProvider(
         ChangeNotifierProvider(create: (_) => DataDniProvider()),
         ChangeNotifierProvider(create: (_) => UserImgProvider()),
         ChangeNotifierProvider(create: (_) => PapersImgProvider()),
-        ChangeNotifierProvider(create: (_) => ButtonSendProvider()),
+        ChangeNotifierProvider(create: (_) => UserInfoProvider()),
+        ChangeNotifierProvider(create: (_) => SendDataProvider()),
       ],
       child: const MyApp(),
     ));

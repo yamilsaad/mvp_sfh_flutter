@@ -1,9 +1,11 @@
+import 'package:flutter/material.dart';
+
 class UserInfo {
   String celular;
   String trabajo;
   String infoDni;
-  List<String> imageUrls;
-  List<String> fotos;
+  List<FileImage> imageUrls;
+  List<FileImage> fotos;
   String fecha;
   String totalRecibo;
 

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/provider.dart';
 import '../providers/userimg_provider.dart'; // Asegúrate de importar el provider correcto
 
 class ImageUsuarioWidget extends StatefulWidget {
@@ -24,9 +25,13 @@ class _ImageUsuarioWidgetState extends State<ImageUsuarioWidget> {
     setState(() {
       if (pickedFile != null) {
         _images2[index] = File(pickedFile.path);
-        // Agrega la foto a la lista de imágenes del provider
-        Provider.of<UserImgProvider>(context, listen: false)
-            .addImage(_images2[index]!); // Cambio aquí
+
+        // Obtén la instancia actual del UserInfoProvider
+        UserInfoProvider userInfoProvider =
+            Provider.of<UserInfoProvider>(context, listen: false);
+
+        // Agrega la foto a la lista de fotos del usuario en el provider
+        userInfoProvider.userInfo.fotos.add(FileImage(_images2[index]!));
       } else {
         print('No se seleccionó ninguna imagen.');
       }

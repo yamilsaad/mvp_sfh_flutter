@@ -27,9 +27,17 @@ class _ImagePeperState extends State<ImagePeper> {
     setState(() {
       if (pickedFile != null) {
         _images[index] = File(pickedFile.path);
-        // Agrega las fotos a la lista de imágenes del provider
-        Provider.of<PapersImgProvider>(context, listen: false)
-            .addImg(_images[index]!);
+
+        // Obtén la instancia actual del UserInfoProvider
+        UserInfoProvider userInfoProvider =
+            Provider.of<UserInfoProvider>(context, listen: false);
+
+        // Convierte la lista de archivos _images a una lista de FileImage y asigna a imageUrls
+        userInfoProvider.userInfo.imageUrls = _images
+            .map((image) => FileImage(image!))
+            .toList(
+                growable:
+                    false); // Utiliza growable: false para evitar cambios posteriores en la lista
       } else {
         print('No se seleccionó ninguna imagen.');
       }
