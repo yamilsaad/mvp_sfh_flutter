@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/provider.dart';
 
 class ReciboFormWidget extends StatefulWidget {
   final TextEditingController reciboFormController;
@@ -32,6 +35,7 @@ class _ReciboFormWidgetState extends State<ReciboFormWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final providerTotalRecibo = Provider.of<UserInfoProvider>(context);
     return Container(
       margin: EdgeInsets.all(16.0),
       child: Form(
@@ -48,6 +52,14 @@ class _ReciboFormWidgetState extends State<ReciboFormWidget> {
                   hintText: '000000',
                 ),
                 validator: _validateReciboTotal,
+                onChanged: (value) {
+                  setState(() {
+                    _isformReciboValid =
+                        true; // Actualiza la validez del formulario
+                  });
+                  //Actualiza y guarda campo total recibo:
+                  providerTotalRecibo.userInfo.totalRecibo = value;
+                },
               ),
               if (!_isformReciboValid)
                 Text(

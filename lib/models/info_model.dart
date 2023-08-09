@@ -6,7 +6,7 @@ class UserInfo {
   String infoDni;
   List<FileImage> imageUrls;
   List<FileImage> fotos;
-  String fecha;
+  String fechaRrecibo;
   String totalRecibo;
 
   UserInfo({
@@ -15,7 +15,7 @@ class UserInfo {
     required this.infoDni,
     required this.imageUrls,
     required this.fotos,
-    required this.fecha,
+    required this.fechaRrecibo,
     required this.totalRecibo,
   });
 }

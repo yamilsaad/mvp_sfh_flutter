@@ -10,7 +10,7 @@ import '../widgets/widget.dart';
 class NewClientScreen extends StatefulWidget {
   final String scannedData;
 
-  NewClientScreen({Key? key, required this.scannedData});
+  const NewClientScreen({Key? key, required this.scannedData});
 
   @override
   _NewClientScreenState createState() => _NewClientScreenState();
@@ -26,25 +26,28 @@ class _NewClientScreenState extends State<NewClientScreen> {
 
   //LÓGICA DE ENVÍO DE GUARDADO Y ENVIOS DE DATOS (WEBSERVICE)
   void _sendData(DateTime fechaHora) async {
-    final infoDni = Provider.of<UserInfoProvider>(context);
-    final userImg = Provider.of<UserImgProvider>(context);
-    final paperImg = Provider.of<UserImgProvider>(context);
+    final userInfoProvider =
+        Provider.of<UserInfoProvider>(context, listen: false);
+
     //!Ingresar Web Service!!!!!!!!!
     final url = Uri.parse('http://192.168.1.241:8000/api/clientes');
     final headers = {'Content-Type': 'application/json'};
     //final firmaData = firmaWidget.obtenerFirmaData(); // Obtener los datos de la firma
     final body = {
-      'celular': _celularController.text,
+      'celular': userInfoProvider.userInfo.celular,
       'trabajo':
           selectedTrabajo, // remplaza selectedTrabajo con la variable que contiene el valor seleccionado en tu TrabajoTipoWidget
-      'infoDni': infoDni,
-      'foto_usuario': userImg,
-      'fotos_paper':
-          paperImg, // aquí puedes agregar las rutas de las fotos que hayas tomado en tu app
-      'fecha': DateTime.now().toString(), // incluye la fecha y hora actual
-      'total_recibo': _reciboFormController.text,
+      'infoDni': userInfoProvider.userInfo.infoDni,
+      'foto_usuario': userInfoProvider.userInfo.fotos,
+      'fotos_paper': userInfoProvider.userInfo
+          .imageUrls, // aquí puedes agregar las rutas de las fotos que hayas tomado en tu app
+
+      'total_recibo': userInfoProvider.userInfo.totalRecibo,
       //'fecha_recibo': fechaReciboController.text,
-      //'firmaData': firmaData,
+      'fecha_recibo': userInfoProvider.userInfo.fechaRrecibo,
+      //TODO:'firmaData': firmaData,
+      //fecha de envío de información:
+      'fecha_info': DateTime.now().toString(), // incluye la fecha y hora actual
     };
 
     final response =
@@ -90,8 +93,7 @@ class _NewClientScreenState extends State<NewClientScreen> {
               onDateSelected: (String selectedDate) {
                 // Actualiza la variable local con el valor seleccionado
                 fechaSeleccionada = selectedDate;
-                print(
-                    'Fecha seleccionada en MiOtraPantalla: $fechaSeleccionada');
+                //print('Fecha seleccionada en MiOtraPantalla: $fechaSeleccionada');
               },
             ),
             const Divider(height: 5),
@@ -101,13 +103,10 @@ class _NewClientScreenState extends State<NewClientScreen> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(width: 15),
-                ImageUsuarioWidget(),
-                SizedBox(width: 15),
-                InfoDniWidget(
-                  data:
-                      _scannedData, // Pasamos la información escaneada al widget InfoDniWidget.
-                ),
+                const SizedBox(width: 15),
+                const ImageUsuarioWidget(),
+                const SizedBox(width: 15),
+                InfoDniWidget(),
               ],
             ),
             const Divider(height: 5),

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/provider.dart';
 
 class DataSelectWidget extends StatefulWidget {
   final void Function(String)
@@ -80,6 +83,11 @@ class _DataSelectWidgetState extends State<DataSelectWidget> {
 
                 // Llama a la función de devolución de llamada y pasa el valor seleccionado
                 widget.onDateSelected(dataRecibo!);
+
+                // Guarda la fecha seleccionada en el campo "fecha" del modelo UserInfo
+                final userInfoProvider =
+                    Provider.of<UserInfoProvider>(context, listen: false);
+                userInfoProvider.userInfo.fechaRrecibo = dataRecibo!;
               }
 
               print("dateTime: $dateTime");

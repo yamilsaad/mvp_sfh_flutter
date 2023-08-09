@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/provider.dart';
 
 class CelInputWidget extends StatefulWidget {
   final TextEditingController celularController;
@@ -26,6 +29,8 @@ class _CelInputWidgetState extends State<CelInputWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final userCelProvider = Provider.of<UserInfoProvider>(context);
+
     return Container(
       margin: EdgeInsets.all(16.0),
       child: Form(
@@ -46,6 +51,8 @@ class _CelInputWidgetState extends State<CelInputWidget> {
                 setState(() {
                   _isPhoneNumberValid = true;
                 });
+                // Actualizar el campo celular en el modelo UserInfo utilizando el proveedor
+                userCelProvider.userInfo.celular = value;
               },
             ),
             if (!_isPhoneNumberValid)

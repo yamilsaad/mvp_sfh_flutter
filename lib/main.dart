@@ -8,9 +8,6 @@ import 'package:mvp_sfh_flutter/providers/provider.dart';
 
 void main() => runApp(MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => DataDniProvider()),
-        ChangeNotifierProvider(create: (_) => UserImgProvider()),
-        ChangeNotifierProvider(create: (_) => PapersImgProvider()),
         ChangeNotifierProvider(create: (_) => UserInfoProvider()),
         ChangeNotifierProvider(create: (_) => SendDataProvider()),
       ],

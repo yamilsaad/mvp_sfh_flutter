@@ -7,10 +7,6 @@ import 'package:provider/provider.dart';
 import '../providers/provider.dart';
 
 class InfoDniWidget extends StatefulWidget {
-  final String data;
-
-  InfoDniWidget({Key? key, required this.data}) : super(key: key);
-
   @override
   State<InfoDniWidget> createState() => _InfoDniWidgetState();
 }
@@ -18,7 +14,7 @@ class InfoDniWidget extends StatefulWidget {
 class _InfoDniWidgetState extends State<InfoDniWidget> {
   @override
   Widget build(BuildContext context) {
-    final providerInfo = Provider.of<UserInfoProvider>(context).userInfo;
+    final providerInfoDni = Provider.of<UserInfoProvider>(context).userInfo;
 
     return Material(
       elevation: 10,
@@ -33,7 +29,7 @@ class _InfoDniWidgetState extends State<InfoDniWidget> {
         ),
         child: Padding(
           padding: const EdgeInsets.all(15.0),
-          child: Text(providerInfo.infoDni,
+          child: Text(providerInfoDni.infoDni,
               style: TextStyle(color: Colors.white, fontSize: 16)),
         ),
       ),
