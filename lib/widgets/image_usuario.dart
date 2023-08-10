@@ -5,7 +5,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/provider.dart';
-import '../providers/userimg_provider.dart'; // Asegúrate de importar el provider correcto
 
 class ImageUsuarioWidget extends StatefulWidget {
   const ImageUsuarioWidget({Key? key}) : super(key: key); // Cambio aquí

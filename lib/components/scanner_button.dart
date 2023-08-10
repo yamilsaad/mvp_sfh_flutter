@@ -23,14 +23,12 @@ class _ButtonScannerComponentState extends State<ButtonScannerComponent> {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      color: Colors.pink,
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: FloatingActionButton(
           elevation: 5,
           hoverElevation: 5.0,
           highlightElevation: 12.0,
-          backgroundColor: Colors.pink,
           onPressed: () async {
             String scannedData = await FlutterBarcodeScanner.scanBarcode(
               "#000000",
@@ -50,7 +48,7 @@ class _ButtonScannerComponentState extends State<ButtonScannerComponent> {
               // ignore: use_build_context_synchronously
               Provider.of<UserInfoProvider>(context, listen: false)
                   .userInfo
-                  .infoDni = scannedDni;
+                  .infoDni = formattedData;
               final dni = dataValues[4];
               final url =
                   Uri.parse('${ScannerConfig.apiUrl}/api/clientes/$dni');
@@ -142,8 +140,9 @@ class _ButtonScannerComponentState extends State<ButtonScannerComponent> {
             }
           },
           child: Icon(
-            Icons.qr_code,
-            size: 40,
+            Icons.qr_code_2,
+            size: 30,
+            color: Colors.pink,
           ),
         ),
       ),

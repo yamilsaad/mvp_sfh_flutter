@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/provider.dart';
 
 class JobTipoWidget extends StatefulWidget {
   final Function(String) onJobSelected;
@@ -21,6 +24,7 @@ class _JobTipoWidgetState extends State<JobTipoWidget> {
   ];
   @override
   Widget build(BuildContext context) {
+    final providerSelectJobs = Provider.of<UserInfoProvider>(context);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 15),
       child: DropdownButtonFormField<String>(
@@ -37,6 +41,7 @@ class _JobTipoWidgetState extends State<JobTipoWidget> {
           setState(() {
             _selectedOption = newValue!;
             widget.onJobSelected(newValue);
+            providerSelectJobs.userInfo.trabajo = _selectedOption;
           });
         },
       ),

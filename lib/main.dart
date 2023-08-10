@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localization/flutter_localization.dart';
+import 'package:mvp_sfh_flutter/configs/config.dart';
 import 'package:provider/provider.dart';
 
 import 'models/model.dart';
@@ -59,9 +60,7 @@ class _MyAppState extends State<MyApp> {
       supportedLocales: _localization.supportedLocales,
       localizationsDelegates: _localization.localizationsDelegates,
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.pink,
-      ),
+      theme: AppTheme(selectedColor: 4).theme(),
       title: 'Credits App SFH',
       initialRoute: '/home',
       routes: {

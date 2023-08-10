@@ -17,7 +17,7 @@ class ImagePeper extends StatefulWidget {
 }
 
 class _ImagePeperState extends State<ImagePeper> {
-  List<File?> _images = [null, null, null, null, null];
+  final List<File?> _images = [null, null, null, null, null];
 
   final picker = ImagePicker();
 

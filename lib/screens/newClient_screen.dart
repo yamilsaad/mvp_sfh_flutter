@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 import '../components/component.dart';
-import '../providers/provider.dart';
 import '../widgets/widget.dart';
+import 'package:mvp_sfh_flutter/providers/provider.dart';
 
 class NewClientScreen extends StatefulWidget {
   final String scannedData;
@@ -24,46 +22,10 @@ class _NewClientScreenState extends State<NewClientScreen> {
   String _scannedData = ''; // Variable para almacenar la información escaneada
   bool isContainerVisible = false;
 
-  //LÓGICA DE ENVÍO DE GUARDADO Y ENVIOS DE DATOS (WEBSERVICE)
-  void _sendData(DateTime fechaHora) async {
-    final userInfoProvider =
-        Provider.of<UserInfoProvider>(context, listen: false);
-
-    //!Ingresar Web Service!!!!!!!!!
-    final url = Uri.parse('http://192.168.1.241:8000/api/clientes');
-    final headers = {'Content-Type': 'application/json'};
-    //final firmaData = firmaWidget.obtenerFirmaData(); // Obtener los datos de la firma
-    final body = {
-      'celular': userInfoProvider.userInfo.celular,
-      'trabajo':
-          selectedTrabajo, // remplaza selectedTrabajo con la variable que contiene el valor seleccionado en tu TrabajoTipoWidget
-      'infoDni': userInfoProvider.userInfo.infoDni,
-      'foto_usuario': userInfoProvider.userInfo.fotos,
-      'fotos_paper': userInfoProvider.userInfo
-          .imageUrls, // aquí puedes agregar las rutas de las fotos que hayas tomado en tu app
-
-      'total_recibo': userInfoProvider.userInfo.totalRecibo,
-      //'fecha_recibo': fechaReciboController.text,
-      'fecha_recibo': userInfoProvider.userInfo.fechaRrecibo,
-      //TODO:'firmaData': firmaData,
-      //fecha de envío de información:
-      'fecha_info': DateTime.now().toString(), // incluye la fecha y hora actual
-    };
-
-    final response =
-        await http.post(url, headers: headers, body: jsonEncode(body));
-
-    if (response.statusCode == 200) {
-      // El web service respondió correctamente
-      print('Información enviada correctamente');
-    } else {
-      // El web service respondió con un error
-      print('Error al enviar la información');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final userInfoProvider =
+        Provider.of<UserInfoProvider>(context, listen: false);
     ButtonSms buttonSms = ButtonSms();
     return Scaffold(
       appBar: AppBar(
@@ -123,9 +85,9 @@ class _NewClientScreenState extends State<NewClientScreen> {
             SizedBox(height: 10),
             SizedBox(
               //*Botón ENVIAR con un ALERT:
-              width: double.infinity,
-              child: ButtonSend().buttonSend(
-                  context), //instancia de ButtonSend llamando el metodo buttonSend.
+              width: 350,
+              child: ButtonSend(userInfoProvider)
+                  .buttonSend(context), // Cambio aquí
             ),
             SizedBox(height: 10),
           ],
@@ -155,3 +117,51 @@ class _NewClientScreenState extends State<NewClientScreen> {
                     _scannedData, // Pasamos la información escaneada al widget InfoDniWidget.
               ),
             ),*/
+
+
+
+
+
+
+
+
+/*
+  //LÓGICA DE ENVÍO DE GUARDADO Y ENVIOS DE DATOS (WEBSERVICE)
+  void _sendData(DateTime fechaHora) async {
+    final userInfoProvider =
+        Provider.of<UserInfoProvider>(context, listen: false);
+
+    //!Ingresar Web Service!!!!!!!!!
+    final url = Uri.parse('http://192.168.1.241:8000/api/addcliente');
+    final headers = {'Content-Type': 'application/json'};
+    //final firmaData = firmaWidget.obtenerFirmaData(); // Obtener los datos de la firma
+    final body = {
+      'celular': userInfoProvider.userInfo.celular,
+      'trabajo':
+          selectedTrabajo, // remplaza selectedTrabajo con la variable que contiene el valor seleccionado en tu TrabajoTipoWidget
+      'infoDni': userInfoProvider.userInfo.infoDni,
+      'foto_usuario': userInfoProvider.userInfo.fotos,
+      'fotos_paper': userInfoProvider.userInfo
+          .imageUrls, // aquí puedes agregar las rutas de las fotos que hayas tomado en tu app
+
+      'total_recibo': userInfoProvider.userInfo.totalRecibo,
+      //'fecha_recibo': fechaReciboController.text,
+      'fecha_recibo': userInfoProvider.userInfo.fechaRrecibo,
+      //TODO:'firmaData': firmaData,
+      //fecha de envío de información:
+      'fecha_info': DateTime.now().toString(), // incluye la fecha y hora actual
+    };
+
+    print('Enviando datos $body');
+
+    final response =
+        await http.post(url, headers: headers, body: jsonEncode(body));
+
+    if (response.statusCode == 200) {
+      // El web service respondió correctamente
+      print('Información enviada correctamente');
+    } else {
+      // El web service respondió con un error
+      print('Error al enviar la información');
+    }
+  }*/
