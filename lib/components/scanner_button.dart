@@ -22,6 +22,7 @@ class _ButtonScannerComponentState extends State<ButtonScannerComponent> {
 
   @override
   Widget build(BuildContext context) {
+    final providerDniFormated = Provider.of<FormatedDniProvider>(context);
     return BottomAppBar(
       child: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -48,7 +49,7 @@ class _ButtonScannerComponentState extends State<ButtonScannerComponent> {
               // ignore: use_build_context_synchronously
               Provider.of<UserInfoProvider>(context, listen: false)
                   .userInfo
-                  .infoDni = formattedData;
+                  .infoDni = scannedData;
               final dni = dataValues[4];
               final url =
                   Uri.parse('${ScannerConfig.apiUrl}/api/clientes/$dni');
@@ -134,8 +135,8 @@ class _ButtonScannerComponentState extends State<ButtonScannerComponent> {
               }
 
               setState(() {
-                _data = formattedData;
-                widget.updateScannedData(formattedData);
+                providerDniFormated.formatedDni = formattedData;
+                widget.updateScannedData(scannedData);
               });
             }
           },

@@ -86,7 +86,7 @@ class _NewClientScreenState extends State<NewClientScreen> {
             SizedBox(
               //*Botón ENVIAR con un ALERT:
               width: 350,
-              child: ButtonSend(userInfoProvider)
+              child: ButtonSend(userInfoProvider, context)
                   .buttonSend(context), // Cambio aquí
             ),
             SizedBox(height: 10),
