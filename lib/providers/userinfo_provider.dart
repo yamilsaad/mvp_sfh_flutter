@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:mvp_sfh_flutter/models/model.dart';
 
@@ -6,7 +8,7 @@ class UserInfoProvider extends ChangeNotifier {
       imageUrls: [],
       celular: '',
       fechaRrecibo: '',
-      fotos: [],
+      fotos: File(''),
       infoDni: '',
       totalRecibo: '',
       trabajo: '');

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 class UserInfo {
   String celular;
   String trabajo;
   String infoDni;
-  List<FileImage> imageUrls;
-  List<FileImage> fotos;
+  List<String> imageUrls; // Cambio aquí
+  File fotos; // También aquí
   String fechaRrecibo;
   String totalRecibo;
 

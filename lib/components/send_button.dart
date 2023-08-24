@@ -1,100 +1,88 @@
+import 'dart:io'; // Agregar esta importación
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
+import 'package:provider/provider.dart';
 
 import '../providers/provider.dart';
 
 class ButtonSend {
   final UserInfoProvider userInfoProvider;
-  final BuildContext context; // Agregamos el contexto como parámetro
+  final BuildContext context;
 
   ButtonSend(this.userInfoProvider, this.context);
 
-  Future<void> _sendData(DateTime dateTime) async {
-    final url = Uri.parse('http://192.168.1.241:8000/api/addcliente');
-    final headers = {'Content-Type': 'application/json'};
+  Dio dio = Dio();
 
-    final body = {
-      //'celular': userInfoProvider.userInfo.celular,
-      //'trabajo': userInfoProvider.userInfo.trabajo,
-      'infoDni': userInfoProvider.userInfo.infoDni,
-      //'foto_usuario': userInfoProvider.userInfo.fotos,
-      //'fotos_paper': userInfoProvider.userInfo.imageUrls,
-      //'total_recibo': userInfoProvider.userInfo.totalRecibo,
-      //'fecha_recibo': userInfoProvider.userInfo.fechaRrecibo,
-      //'fecha_info': DateTime.now().toString(),
-    };
+  Future<void> sendData(DateTime dateTime) async {
+    // Agregar dateTime aquí
+    try {
+      final infoDniProvider = userInfoProvider.userInfo;
+      final imageUsuarioProvider = userInfoProvider.userInfo.fotos;
 
-    print('Enviando datos $body');
+      FormData formData = FormData.fromMap({
+        'infoDni': infoDniProvider.infoDni,
+        'foto_usuario': imageUsuarioProvider.readAsBytes(),
+      });
 
-    final response =
-        await http.post(url, headers: headers, body: jsonEncode(body));
-    print('Respuesta del servidor: ${response.statusCode} - ${response.body}');
+      Response response = await dio.post(
+        'http://192.168.1.241:8000/api/addcliente',
+        data: formData,
+      );
 
-    if (response.statusCode == 200) {
-      print('Información enviada correctamente');
-    } else {
-      print('Error al enviar la información');
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Error'),
-              content: Text('Error al enviar la información'),
-              actions: [
-                FloatingActionButton(
-                    child: Text('Ok'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    })
-              ],
-            );
-          });
+      if (response.statusCode == 200) {
+        print('Enviado correctamente');
+      } else {
+        print('Error ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
     }
-    print('Enviando datos: $dateTime');
   }
+}
 
-  TextButton buttonSend(BuildContext context) {
-    return TextButton(
-      style: ButtonStyle(
-        padding: MaterialStateProperty.all(EdgeInsets.all(15)),
-        backgroundColor: MaterialStateColor.resolveWith(
-            (states) => const Color.fromARGB(255, 126, 236, 130)),
+TextButton buttonSend(BuildContext context, ButtonSend buttonSend) {
+  // Agregar ButtonSend aquí
+  return TextButton(
+    style: ButtonStyle(
+      padding: MaterialStateProperty.all(EdgeInsets.all(15)),
+      backgroundColor: MaterialStateColor.resolveWith(
+        (states) => const Color.fromARGB(255, 126, 236, 130),
       ),
-      onPressed: () {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+    ),
+    onPressed: () {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            title: Text('¿Está seguro de enviar la información?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('Cancelar'),
               ),
-              title: Text('¿Está seguro de enviar la información?'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Cancelar'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    DateTime now = DateTime.now();
-                    print('Enviando información: ${userInfoProvider.userInfo}');
-                    _sendData(now);
-                  },
-                  child: Text('Ok'),
-                ),
-              ],
-            );
-          },
-        );
-      },
-      child: Text(
-        'Enviar información',
-        style: TextStyle(color: Colors.white, fontSize: 25),
-      ),
-    );
-  }
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  DateTime now = DateTime.now();
+                  print(
+                      'Enviando información: ${buttonSend.userInfoProvider.userInfo}');
+                  buttonSend.sendData(now); // Llamar al método sendData
+                },
+                child: Text('Ok'),
+              ),
+            ],
+          );
+        },
+      );
+    },
+    child: Text(
+      'Enviar información',
+      style: TextStyle(color: Colors.white, fontSize: 25),
+    ),
+  );
 }

@@ -7,41 +7,45 @@ import 'package:provider/provider.dart';
 import '../providers/provider.dart';
 
 class ImageUsuarioWidget extends StatefulWidget {
-  const ImageUsuarioWidget({Key? key}) : super(key: key); // Cambio aquí
+  const ImageUsuarioWidget({Key? key}) : super(key: key);
 
   @override
   State<ImageUsuarioWidget> createState() => _ImageUsuarioWidgetState();
 }
 
 class _ImageUsuarioWidgetState extends State<ImageUsuarioWidget> {
-  List<File?> _images2 = [null];
+  File? images2;
 
   final picker = ImagePicker();
 
-  Future getImage(int index) async {
-    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+  Future<void> _getImage() async {
+    final XFile? pickedFile =
+        await picker.pickImage(source: ImageSource.camera);
 
-    setState(() {
-      if (pickedFile != null) {
-        _images2[index] = File(pickedFile.path);
+    if (pickedFile != null) {
+      setState(() {
+        images2 = File(pickedFile.path);
 
-        // Obtén la instancia actual del UserInfoProvider
-        UserInfoProvider userInfoProvider =
+        final userInfoProvider =
             Provider.of<UserInfoProvider>(context, listen: false);
+        userInfoProvider.userInfo.fotos = images2!;
+      });
+    } else {
+      print('No se seleccionó ninguna imagen.');
+    }
+  }
 
-        // Agrega la foto a la lista de fotos del usuario en el provider
-        userInfoProvider.userInfo.fotos.add(FileImage(_images2[index]!));
-      } else {
-        print('No se seleccionó ninguna imagen.');
-      }
-    });
+  @override
+  void dispose() {
+    images2?.delete(); // Elimina la imagen capturada al cerrar el widget
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: GestureDetector(
-        onTap: () => getImage(0),
+        onTap: () => _getImage(),
         child: Container(
           margin: EdgeInsets.all(5),
           width: 125,
@@ -57,7 +61,7 @@ class _ImageUsuarioWidgetState extends State<ImageUsuarioWidget> {
               ),
             ],
           ),
-          child: _images2[0] == null
+          child: images2 == null
               ? ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: FadeInImage(
@@ -69,7 +73,7 @@ class _ImageUsuarioWidgetState extends State<ImageUsuarioWidget> {
               : ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image.file(
-                    _images2[0]!,
+                    images2!, // Convierte la ruta en un objeto File
                     fit: BoxFit.cover,
                   ),
                 ),

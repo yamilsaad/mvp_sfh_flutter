@@ -33,11 +33,11 @@ class _ImagePeperState extends State<ImagePeper> {
             Provider.of<UserInfoProvider>(context, listen: false);
 
         // Convierte la lista de archivos _images a una lista de FileImage y asigna a imageUrls
-        userInfoProvider.userInfo.imageUrls = _images
-            .map((image) => FileImage(image!))
-            .toList(
-                growable:
-                    false); // Utiliza growable: false para evitar cambios posteriores en la lista
+        //userInfoProvider.userInfo.fotos = _images
+        // .map((image) => FileImage(image!))
+        //.toList(
+        //    growable:
+        //          false); // Utiliza growable: false para evitar cambios posteriores en la lista
       } else {
         print('No se seleccionó ninguna imagen.');
       }

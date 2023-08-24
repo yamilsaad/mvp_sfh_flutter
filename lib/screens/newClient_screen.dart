@@ -27,6 +27,54 @@ class _NewClientScreenState extends State<NewClientScreen> {
     final userInfoProvider =
         Provider.of<UserInfoProvider>(context, listen: false);
     ButtonSms buttonSms = ButtonSms();
+
+    TextButton buildButtonSend(BuildContext context) {
+      return TextButton(
+        style: ButtonStyle(
+          padding: MaterialStateProperty.all(EdgeInsets.all(15)),
+          backgroundColor: MaterialStateColor.resolveWith(
+            (states) => const Color.fromARGB(255, 126, 236, 130),
+          ),
+        ),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                title: Text('¿Está seguro de enviar la información?'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Cancelar'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      DateTime now = DateTime.now();
+                      print(
+                          'Enviando información: ${userInfoProvider.userInfo}');
+                      ButtonSend(userInfoProvider, context)
+                          .sendData(now); // Llamar al método sendData
+                    },
+                    child: Text('Ok'),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        child: Text(
+          'Enviar información',
+          style: TextStyle(color: Colors.white, fontSize: 25),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Nuevo Cliente'),
@@ -86,8 +134,7 @@ class _NewClientScreenState extends State<NewClientScreen> {
             SizedBox(
               //*Botón ENVIAR con un ALERT:
               width: 350,
-              child: ButtonSend(userInfoProvider, context)
-                  .buttonSend(context), // Cambio aquí
+              child: buildButtonSend(context), // Llamamos a la función aquí
             ),
             SizedBox(height: 10),
           ],
