@@ -1,7 +1,6 @@
 import 'dart:io'; // Agregar esta importación
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:provider/provider.dart';
 
 import '../providers/provider.dart';
 
@@ -21,7 +20,7 @@ class ButtonSend {
 
       FormData formData = FormData.fromMap({
         'infoDni': infoDniProvider.infoDni,
-        'foto_usuario': imageUsuarioProvider.readAsBytes(),
+        'foto_usuario': await MultipartFile.fromFile(imageUsuarioProvider.path),
       });
 
       Response response = await dio.post(
